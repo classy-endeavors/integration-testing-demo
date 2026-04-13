@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r /tests/requirements.txt
 
 COPY integration-tests /tests
 
-CMD ["pytest", "-q", "test_sockshop.py"]
+CMD ["python", "/tests/run_integration_tests.py"]

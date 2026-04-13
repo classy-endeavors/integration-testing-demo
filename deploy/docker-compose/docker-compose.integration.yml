@@ -5,5 +5,7 @@ services:
       dockerfile: integration-tests/Dockerfile
     environment:
       - SOCKSHOP_BASE_URL=http://edge-router
+      - TEST_SUITE=all
+      - PYTHONUNBUFFERED=1
     depends_on:
       - edge-router

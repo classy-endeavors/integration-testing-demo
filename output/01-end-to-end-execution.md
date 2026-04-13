@@ -46,7 +46,9 @@ Why manual was needed:
 
 ### 3) Design integration test coverage
 
-- Define black-box tests through `edge-router`.
+- Define two complementary suites:
+  - frontend-backend black-box tests through `edge-router`,
+  - backend-only direct service integration checks.
 - Select baseline functional and non-functional checks:
   - frontend availability,
   - catalogue data contract,
@@ -68,7 +70,12 @@ Why manual was needed:
 ### 4) Implement tests and test runtime containerization
 
 - Create integration test files and dependency list.
+- Add marker-based test separation:
+  - `frontend_backend` for `test_sockshop.py`,
+  - `backend` for `test_backend_services.py`.
 - Configure integration test service in Compose override.
+- Add a runner script (`run_integration_tests.py`) that accepts `TEST_SUITE` and prints clear PASS/FAIL labels.
+- Add a shell orchestrator (`run_integration_suites.sh`) to run both suites sequentially.
 - Ensure command path supports repeatable execution.
 
 AI role:
@@ -84,7 +91,17 @@ Why manual was needed:
 
 ### 5) Execute and debug
 
-- Run tests end to end through Compose.
+- Run tests with explicit modes:
+  - `make test-integration-frontend-backend`
+  - `make test-integration-backend-only`
+  - `bash run_integration_suites.sh` (both suites)
+- Stream detailed execution logs from inside tests:
+  - per-test lifecycle logs (`[TEST-START]`, `[TEST-END]`)
+  - per-service logs (`[SERVICE][catalogue]`, `[SERVICE][user]`, `[SERVICE][orders]`, etc.)
+  - request/response logs (`[HTTP]` status + latency + content-type)
+  - infrastructure connectivity logs (`[TCP]` for `user-db` and `rabbitmq`)
+- Persist run evidence automatically:
+  - every run overwrites `output/integration-test-latest.md` with timestamp, suite results, overall result, and full console output.
 - Inspect failures (if any), adjust assertions, rerun until stable.
 - Confirm final pass state.
 
@@ -115,5 +132,11 @@ Why manual was needed:
 ## Outcome
 
 - Integration test suite created and runnable.
+- Two runnable integration modes provided:
+  - frontend-backend
+  - backend-only
+- Combined shell entrypoint provided for one-command execution of both suites with clear output.
+- Per-service and per-test runtime observability added for debugging and reviewer transparency.
+- Automatic Markdown report output added for reproducible audit trail (`output/integration-test-latest.md`).
 - Test execution documented and reported.
 - End-to-end recruitment deliverable completed with AI-heavy workflow and targeted manual interventions where trust, environment, or judgment required human control.
