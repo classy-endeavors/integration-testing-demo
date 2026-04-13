@@ -44,6 +44,26 @@ From the point of view of a user, is the application functional? Items to test:
 -- Use case testing
 - Any public APIs
 
+## Local Docker Compose integration tests
+
+The repository includes a lightweight integration test suite under `integration-tests/` that validates the running Sock Shop application through `edge-router`.
+
+### Covered scenarios
+
+- Frontend is reachable and serving HTML (`/`)
+- Catalogue API returns at least one product (`/catalogue?size=3`)
+- Tags API returns a non-empty tag list (`/tags`)
+
+### Run the tests
+
+From the repository root:
+
+```bash
+docker-compose -f deploy/docker-compose/docker-compose.yml -f deploy/docker-compose/docker-compose.integration.yml up --build --abort-on-container-exit integration-tests
+```
+
+This starts the application services plus the `integration-tests` service and exits with the test container status code.
+
 ## Test environments
 
 | Environment | Responsibilities                                                 | Level mapping                |
