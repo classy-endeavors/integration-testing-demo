@@ -131,6 +131,4 @@ output-virtualbox-iso
 # Ignore grafanalib output
 /graphs/__pycache__/
 /graphs/*.json
-temp_auto_push.bat
-temp_interactive_push.bat
 .gitignore
